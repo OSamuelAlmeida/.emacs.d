@@ -134,7 +134,8 @@
 
 (use-package projectile
   :diminish
-  :bind-keymap (("C-c p" . projectile-command-map))
+  :bind (:map projectile-mode-map
+	       ("C-c p" . projectile-command-map))
   :config
   (projectile-mode))
 
