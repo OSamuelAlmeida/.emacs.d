@@ -72,7 +72,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages '(ivy use-package)))
+ '(package-selected-packages '(counsel-projectile projectile ivy use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -119,6 +119,7 @@
   (counsel-mode))
 
 (use-package ivy-rich
+  :after counsel
   :config
   (ivy-rich-mode 1))
 
@@ -126,3 +127,15 @@
   :diminish
   :config
   (which-key-mode))
+
+;; Project management
+
+(use-package projectile
+  :bind-keymap (("C-c p" . projectile-command-map))
+  :config
+  (projectile-mode))
+
+(use-package counsel-projectile
+  :after projectile
+  :config
+  (counsel-projectile-mode))
