@@ -90,7 +90,7 @@
   :config
   (doom-modeline-mode)
   (unless (package-installed-p 'doom-modeline)
-    (all-the-icons-install-fonts)))
+    (all-the-icons-install-fonts t)))
 
 (use-package rainbow-delimiters
   :diminish
