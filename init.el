@@ -115,10 +115,12 @@
   (ivy-mode))
 
 (use-package counsel
+  :diminish
   :config
   (counsel-mode))
 
 (use-package ivy-rich
+  :diminish
   :after counsel
   :config
   (ivy-rich-mode 1))
@@ -131,13 +133,16 @@
 ;; Project management
 
 (use-package projectile
+  :diminish
   :bind-keymap (("C-c p" . projectile-command-map))
   :config
   (projectile-mode))
 
 (use-package counsel-projectile
+  :diminish
   :after projectile
   :config
   (counsel-projectile-mode))
 
 (use-package magit)
+
