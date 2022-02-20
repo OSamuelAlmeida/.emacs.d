@@ -297,7 +297,7 @@ We want =counsel= and =ivy= features when running =projectitle= commands.
 
 **** solidity-mode
 
-The official =solidity-mode= for Emacs. Adds syntax highlight for ~.sol~ files.
+The official =solidity-mode= for Emacs. Adds syntax highlight to ~.sol~ files.
 
 #+begin_src emacs-lisp
 (use-package solidity-mode)
