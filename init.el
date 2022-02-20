@@ -87,7 +87,7 @@
 
 (use-package org
   :config
-  (setq org-ellipsis " ▼"
+  (setq org-ellipsis " ▼"))
 
 
 ;; Appearance packages
