@@ -11,7 +11,7 @@ This removes the Welcome startup screen.
 
 #+begin_src emacs-lisp
   (setq inhibit-startup-message t)
-  #+end_src
+#+end_src
 
 ** UI
 
@@ -141,7 +141,7 @@ Enabling use-package.
 
 #+begin_src emacs-lisp
   (require 'use-package)
-  
+
   (setq use-package-always-ensure t)
 #+end_src
 
@@ -157,7 +157,7 @@ Updates and configures Org mode.
 	  org-log-done 'time
 	  org-log-into-drawer t)
     (require 'org-tempo)
-  
+
     (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp")))
 #+end_src
 
@@ -194,63 +194,111 @@ Installs and configure =doom-modeline=
     :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
 
-*** Documentation packages
+*** Documentation
+
+**** helpful
+
+Replaces the default describe functions keybindings with a more complete documentation. We also use the integrate with =counsel= for command auto-completion and descriptions.
 
 #+begin_src emacs-lisp
-;; Documentation
+  (use-package helpful
+    :custom
+    (counsel-describe-function-function #'helpful-callable)
+    (counsel-describe-variable-function #'helpful-variable)
+    :bind (([remap describe-function] . counsel-describe-funtion)
+	   ([remap describe-variable] . counsel-describe-variable)
+	   ([remap describe-key] . #'helpful-key)))
+#+end_src
 
-(use-package helpful
-  :custom
-  (counsel-describe-function-function #'helpful-callable)
-  (counsel-describe-variable-function #'helpful-variable)
-  :bind (([remap describe-function] . counsel-describe-funtion)
-	 ([remap describe-variable] . counsel-describe-variable)
-	 ([remap describe-key] . #'helpful-key)))
+*** Auto-completion
 
+**** ivy
 
-;; Command auto-completion
+We use =ivy= for a light-weight auto-completion for commands.
 
-(use-package ivy
-  :diminish
-  :config
-  (ivy-mode))
+#+begin_src emacs-lisp
+  (use-package ivy
+    :diminish
+    :config
+    (ivy-mode))
+#+end_src
 
-(use-package counsel
-  :diminish
-  :config
-  (counsel-mode))
+**** counsel
 
-(use-package ivy-rich
-  :diminish
-  :after counsel
-  :config
-  (ivy-rich-mode 1))
+Counsel adds extra functionality to =ivy-mode= and its auto-completion features.
 
-(use-package which-key
-  :diminish
-  :config
-  (which-key-mode))
+#+begin_src emacs-lisp
+  (use-package counsel
+    :diminish
+    :config
+    (counsel-mode))
+#+end_src
 
-;; Project management
+**** ivy-rich
 
-(use-package projectile
-  :diminish
-  :bind (:map projectile-mode-map
-	       ("C-c p" . projectile-command-map))
-  :config
-  (projectile-mode))
+Shows richer information when using =ivy-mode= and =cousel-mode=.
 
-(use-package counsel-projectile
-  :diminish
-  :after projectile
-  :config
-  (counsel-projectile-mode))
+#+begin_src emacs-lisp
+  (use-package ivy-rich
+    :diminish
+    :after counsel
+    :config
+    (ivy-rich-mode 1))
+#+end_src
 
-(use-package magit)
+**** which-key
 
-;; Programming Languages
+This package shows what commands can follow after you start a chord and waits.
 
-;; Solidity
+#+begin_src emacs-lisp
+  (use-package which-key
+    :diminish
+    :config
+    (which-key-mode))
+#+end_src
 
+*** Project Management
+
+**** projectile
+
+Improves project management capabilities of Emacs, adding features such as: searching all files in a project.
+We bind =C-c p= to access =projectile='s keymap.
+
+#+begin_src emacs-lisp
+  (use-package projectile
+    :diminish
+    :bind (:map projectile-mode-map
+		("C-c p" . projectile-command-map))
+    :config
+    (projectile-mode))
+#+end_src
+
+**** counsel-projectile
+
+We want =counsel= and =ivy= features when running =projectitle= commands.
+
+#+begin_src emacs-lisp
+  (use-package counsel-projectile
+    :diminish
+    :after projectile
+    :config
+    (counsel-projectile-mode))
+#+end_src
+
+**** magit
+
+=magit= integrates Git commands inside the Emacs editor.
+
+#+begin_src emacs-lisp
+  (use-package magit)
+#+end_src
+
+*** Programming Languages
+
+**** solidity-mode
+
+The official =solidity-mode= for Emacs. Adds syntax highlight for ~.sol~ files.
+
+#+begin_src emacs-lisp
 (use-package solidity-mode)
 #+end_src
