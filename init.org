@@ -1,0 +1,256 @@
+#+TITLE: Emacs Configuration File
+#+PROPERTY: header-args:emacs-lisp :tangle ./init.el
+
+* Vanilla Configuration
+
+This section makes changes to the vanilla properties and modes in Emacs.
+
+** Startup
+
+This removes the Welcome startup screen.
+
+#+begin_src emacs-lisp
+  (setq inhibit-startup-message t)
+  #+end_src
+
+** UI
+
+*** Modes
+
+We remove most mouse-based elements from Emacs UI, leaving only the text-editor.
+
+#+begin_src emacs-lisp
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+#+end_src
+
+This enables line number and column information in the editor. We also remove the line number from some of the modes where it is not visually appealing.
+
+#+begin_src emacs-lisp
+  (global-display-line-numbers-mode 1)
+  (column-number-mode 1)
+
+  ;; Disable line numbers on certain modes
+  (dolist (mode '(shell-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+#+end_src
+
+A mode for highlighting the current cursor line in Emacs.
+
+#+begin_src emacs-lispn
+  (global-hl-line-mode 1)
+#+end_src
+
+*** Backups
+
+We change Emacs backup files directory from the file folder to a system temp folder.
+
+#+begin_src emacs-lisp
+  (setq backup-directory-alist
+	`((".*" . ,temporary-file-directory)))
+  (setq auto-save-file-name-transforms
+	`((".*" ,temporary-file-directory t)))
+#+end_src
+
+** Theme
+
+*** Modus Vivendi
+
+Using the dark theme Modus Vivendi.
+
+#+begin_src emacs-lisp
+  (load-theme 'modus-vivendi t)
+#+end_src
+
+*** Faces
+
+Remove the border from the mode line
+
+#+begin_src emacs-lisp
+  (set-face-attribute 'mode-line nil :box nil)
+  (set-face-attribute 'mode-line-inactive nil :box nil)
+#+end_src
+
+Changes the font size in the editor.
+
+#+begin_src emacs-lisp
+  (set-face-attribute 'default nil :height 170)
+#+end_src
+
+Adds transparency to the active and inactive frame.
+
+#+begin_src emacs-lisp
+  (set-frame-parameter (selected-frame) 'alpha '(92 85))
+  (add-to-list 'default-frame-alist '(alpha 92 85))
+#+end_src
+
+*** Parentheses
+
+Changes the style for Modus Vivendi parentheses matching.
+
+#+begin_src emacs-lisp
+  (setq modus-themes-paren-match '(bold intense))
+#+end_src
+
+*** Window
+
+Starts Emacs window maximized.
+
+#+begin_src emacs-lisp
+  (add-hook 'window-setup-hook 'toggle-frame-maximized t)
+#+end_src
+
+
+*** Keybindings
+
+Changes =Escape= to do the same as =C-g=.
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+#+end_src
+
+** Packages
+
+*** Package loader
+
+We load the package loader package and initialize its contents.
+
+#+begin_src emacs-lisp
+  (require 'package)
+
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+			   ("org" . "https://orgmode.org/elpa/")
+			   ("elpa" . "https://elpa.gnu.org/packages/")))
+
+  (package-initialize)
+
+  (unless package-archive-contents
+    (package-refresh-contents))
+#+end_src
+
+*** use-package
+
+Here we install use-package, if not already installed.
+
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'use-package)
+    (package-install 'use-package))
+#+end_src
+
+Enabling use-package.
+
+#+begin_src emacs-lisp
+  (require 'use-package)
+  
+  (setq use-package-always-ensure t)
+#+end_src
+
+*** Org Mode
+
+Updates and configures Org mode.
+
+#+begin_src emacs-lisp
+  (use-package org
+    :config
+    (setq org-ellipsis " ▼"
+	  org-agenda-start-with-log-mode t
+	  org-log-done 'time
+	  org-log-into-drawer t)
+    (require 'org-tempo)
+  
+    (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp")))
+#+end_src
+
+*** Apperance packages
+
+**** :diminish
+
+This adds =:diminish= command to =use-package=, allowing us to hide minor modes.
+
+#+begin_src emacs-lisp
+  (use-package diminish)
+#+end_src
+
+**** doom-modeline
+
+Installs and configure =doom-modeline=
+
+#+begin_src emacs-lisp
+  (use-package doom-modeline
+    :diminish
+    :config
+    (doom-modeline-mode)
+    (unless (package-installed-p 'doom-modeline)
+      (all-the-icons-install-fonts t)))
+#+end_src
+
+**** rainbow-delimiters
+
+=rainbow-delimiters= adds colors to matching parenthesis in programming modes.
+
+#+begin_src emacs-lisp
+  (use-package rainbow-delimiters
+    :diminish
+    :hook (prog-mode . rainbow-delimiters-mode))
+#+end_src
+
+*** Documentation packages
+
+#+begin_src emacs-lisp
+;; Documentation
+
+(use-package helpful
+  :custom
+  (counsel-describe-function-function #'helpful-callable)
+  (counsel-describe-variable-function #'helpful-variable)
+  :bind (([remap describe-function] . counsel-describe-funtion)
+	 ([remap describe-variable] . counsel-describe-variable)
+	 ([remap describe-key] . #'helpful-key)))
+
+
+;; Command auto-completion
+
+(use-package ivy
+  :diminish
+  :config
+  (ivy-mode))
+
+(use-package counsel
+  :diminish
+  :config
+  (counsel-mode))
+
+(use-package ivy-rich
+  :diminish
+  :after counsel
+  :config
+  (ivy-rich-mode 1))
+
+(use-package which-key
+  :diminish
+  :config
+  (which-key-mode))
+
+;; Project management
+
+(use-package projectile
+  :diminish
+  :bind (:map projectile-mode-map
+	       ("C-c p" . projectile-command-map))
+  :config
+  (projectile-mode))
+
+(use-package counsel-projectile
+  :diminish
+  :after projectile
+  :config
+  (counsel-projectile-mode))
+
+(use-package magit)
+
+;; Programming Languages
+
+;; Solidity
+
+(use-package solidity-mode)
+#+end_src
