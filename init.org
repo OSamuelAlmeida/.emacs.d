@@ -400,6 +400,27 @@ Adds syntax highlighting capabilities to Emacs.
     :hook (prog-mode . flycheck-mode))
 #+end_src
 
+**** pyvenv
+
+Enables python virtual env in Emacs.
+
+#+begin_src emacs-lisp
+  (use-package pyvenv
+    :diminish
+    :hook (python-mode . pyvenv-mode))
+
+#+end_src
+
+**** blacken
+
+Applies Python black formatter.
+
+#+begin_src emacs-lisp
+  (use-package blacken
+    :diminish
+    :hook (python-mode . blacken-mode))
+#+end_src
+
 **** solidity-mode
 
 The official =solidity-mode= for Emacs. Adds syntax highlight to ~.sol~ files.
