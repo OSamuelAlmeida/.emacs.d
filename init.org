@@ -161,6 +161,17 @@ Updates and configures Org mode.
     (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp")))
 #+end_src
 
+Automatically exports this file into init.el when saved.
+
+#+begin_src emacs-lisp
+  (defun my/init-org-save-hook ()
+    (when (string-equal buffer-file-truename "~/.emacs.d/init.org")
+      (let ((org-confirm-babel-evaluate nil))
+	(org-babel-tangle))))
+
+  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'my/init-org-save-hook)))
+#+end_src
+
 *** Apperance packages
 
 **** :diminish
@@ -300,5 +311,6 @@ We want =counsel= and =ivy= features when running =projectitle= commands.
 The official =solidity-mode= for Emacs. Adds syntax highlight to ~.sol~ files.
 
 #+begin_src emacs-lisp
-(use-package solidity-mode)
+  (use-package solidity-mode)
 #+end_src
+
