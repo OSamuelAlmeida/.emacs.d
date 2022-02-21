@@ -109,6 +109,16 @@ Changes =Escape= to do the same as =C-g=.
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 #+end_src
 
+** General Configurations
+
+*** Tabs
+
+Disable =indent-tabs-mode= globally.
+
+#+begin_src emacs-lisp
+  (setq-default indent-tabs-mode nil)
+#+end_src
+
 ** Packages
 
 *** Package loader
@@ -176,7 +186,7 @@ Automatically exports this file into init.el when saved.
   (defun my/init-file-org-save-hook ()
     (when (string-equal buffer-file-truename "~/.emacs.d/init.org")
       (let ((org-confirm-babel-evaluate nil))
-	(org-babel-tangle))))
+        (org-babel-tangle))))
 
   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'my/init-file-org-save-hook)))
 #+end_src
@@ -212,7 +222,7 @@ Installs and configure =doom-modeline=
   (use-package rainbow-delimiters
     :diminish
     :hook (prog-mode . rainbow-delimiters-mode))
-    #+end_src
+#+end_src
 
 *** Documentation
 
