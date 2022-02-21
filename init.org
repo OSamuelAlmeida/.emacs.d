@@ -344,7 +344,8 @@ Language Server Protocol mode for IDE-like features when programming.
   (use-package lsp-mode
     :init
     (setq lsp-keymap-prefix "C-c l")
-    :hook ((lsp-mode . lsp-enable-which-key-integration))
+    :hook ((lsp-mode . lsp-enable-which-key-integration)
+           (js-mode . lsp-deferred))
     :commands (lsp lsp-deferred))
 
 #+end_src
@@ -419,6 +420,18 @@ Applies Python black formatter.
   (use-package blacken
     :diminish
     :hook (python-mode . blacken-mode))
+#+end_src
+
+**** js-mode
+
+=js-mode= hook.
+
+#+begin_src emacs-lisp
+  (defun my/js-mode-hook ()
+    (setq js-indent-level 2)
+    (define-key js-mode-map (kbd "M-.") nil)) ;; M-. is originally-mapped to find symbol in js-mode
+
+  (add-hook 'js-mode-hook 'my/js-mode-hook)
 #+end_src
 
 **** solidity-mode
