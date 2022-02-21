@@ -31,7 +31,9 @@ This enables line number and column information in the editor. We also remove th
   (column-number-mode 1)
 
   ;; Disable line numbers on certain modes
-  (dolist (mode '(shell-mode-hook))
+  (dolist (mode '(shell-mode-hook
+                  vterm-mode-hook
+                  treemacs-mode-hook))
     (add-hook mode (lambda () (display-line-numbers-mode 0))))
 #+end_src
 
