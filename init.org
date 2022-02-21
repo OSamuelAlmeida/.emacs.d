@@ -47,9 +47,9 @@ We change Emacs backup files directory from the file folder to a system temp fol
 
 #+begin_src emacs-lisp
   (setq backup-directory-alist
-	`((".*" . ,temporary-file-directory)))
+        `((".*" . ,temporary-file-directory)))
   (setq auto-save-file-name-transforms
-	`((".*" ,temporary-file-directory t)))
+        `((".*" ,temporary-file-directory t)))
 #+end_src
 
 ** Theme
@@ -129,8 +129,8 @@ We load the package loader package and initialize its contents.
   (require 'package)
 
   (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-			   ("org" . "https://orgmode.org/elpa/")
-			   ("elpa" . "https://elpa.gnu.org/packages/")))
+                           ("org" . "https://orgmode.org/elpa/")
+                           ("elpa" . "https://elpa.gnu.org/packages/")))
 
   (package-initialize)
 
@@ -336,6 +336,15 @@ Makes sure our shell variables are the same inside Emacs.
       (exec-path-from-shell-initialize)))
 #+end_src
 
+**** vterm
+
+Native terminal emulation
+
+#+begin_src emacs-lisp
+  (use-package vterm
+    :commands vterm)
+#+end_src
+
 **** lsp-mode
 
 Language Server Protocol mode for IDE-like features when programming.
@@ -389,7 +398,6 @@ Microsoft's Python language server integration.
                            (lsp-deferred))))
 #+end_src
 
-**** company-mode
 **** company
 
 Adds auto-completion dialogue box.
