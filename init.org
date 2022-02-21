@@ -381,15 +381,29 @@ Microsoft's Python language server integration.
 #+end_src
 
 **** company-mode
+**** company
 
 Adds auto-completion dialogue box.
 
 #+begin_src emacs-lisp
   (use-package company
     :hook (prog-mode . company-mode)
-    :config
-    (setq company-minimum-prefix-length 1
-          company-idle-delay 0.0))
+    :bind (:map company-active-map
+                ("<tab>" . company-complete-selection))
+          (:map lsp-mode-map
+                ("<tab>". company-indent-or-complete-common))
+     :config
+     (setq company-minimum-prefix-length 1
+           company-idle-delay 0.0))
+#+end_src
+
+**** company-box
+
+Improves company interface.
+
+#+begin_src emacs-lisp
+  (use-package company-box
+    :hook (company-mode . company-box-mode))
 #+end_src
 
 **** flycheck
