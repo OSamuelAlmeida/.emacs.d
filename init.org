@@ -37,7 +37,7 @@ This enables line number and column information in the editor. We also remove th
 
 A mode for highlighting the current cursor line in Emacs.
 
-#+begin_src emacs-lispn
+#+begin_src emacs-lisp
   (global-hl-line-mode 1)
 #+end_src
 
