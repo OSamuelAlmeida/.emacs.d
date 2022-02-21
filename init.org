@@ -367,6 +367,15 @@ Shows information from =lsp-mode= in the UI.
   (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
 #+end_src
 
+**** lsp-treemacs
+
+=treemacs= and =lsp-mode= integration to visualize projects.
+
+#+begin_src emacs-lisp
+  (use-package lsp-treemacs
+    :after lsp)
+#+end_src
+
 **** lsp-python-ms
 
 Microsoft's Python language server integration.
