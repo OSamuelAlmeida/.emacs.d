@@ -12,25 +12,37 @@ This removes the Welcome startup screen.
 #+begin_src emacs-lisp
   (setq inhibit-startup-message t)
 #+end_src
+** Backups
 
-** UI
+Set Emacs backup files directory to a system temporary folder.
 
+#+begin_src emacs-lisp
+  (setq backup-directory-alist
+        `((".*" . ,temporary-file-directory)))
+  (setq auto-save-file-name-transforms
+        `((".*" ,temporary-file-directory t)))
+#+end_src
+
+** Appearence
 *** Modes
 
-We remove most mouse-based elements from Emacs UI, leaving only the text-editor.
+Clean up the UI leaving only the text-editor and the top menu bar.
 
 #+begin_src emacs-lisp
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
 #+end_src
 
-This enables line number and column information in the editor. We also remove the line number from some of the modes where it is not visually appealing.
+Enables global line numbers in the editor and shows current column and modeline.
 
 #+begin_src emacs-lisp
   (global-display-line-numbers-mode 1)
   (column-number-mode 1)
+#+end_src
 
-  ;; Disable line numbers on certain modes
+Disables global line numbers in some modes where it doesn't make sense.
+
+#+begin_src emacs-lisp
   (dolist (mode '(shell-mode-hook
                   vterm-mode-hook
                   treemacs-mode-hook))
@@ -43,19 +55,6 @@ A mode for highlighting the current cursor line in Emacs.
   (global-hl-line-mode 1)
 #+end_src
 
-*** Backups
-
-We change Emacs backup files directory from the file folder to a system temp folder.
-
-#+begin_src emacs-lisp
-  (setq backup-directory-alist
-        `((".*" . ,temporary-file-directory)))
-  (setq auto-save-file-name-transforms
-        `((".*" ,temporary-file-directory t)))
-#+end_src
-
-** Theme
-
 *** Modus Vivendi
 
 Using the dark theme Modus Vivendi.
@@ -66,24 +65,27 @@ Using the dark theme Modus Vivendi.
 
 *** Faces
 
-Remove the border from the mode line
+Remove borders from the modeline.
 
 #+begin_src emacs-lisp
   (set-face-attribute 'mode-line nil :box nil)
   (set-face-attribute 'mode-line-inactive nil :box nil)
 #+end_src
 
-Changes the font size in the editor.
+Changes the editor font size.
 
 #+begin_src emacs-lisp
   (set-face-attribute 'default nil :height 170)
 #+end_src
 
-Adds transparency to the active and inactive frame.
+Makes the Emacs window transparent, with different alphas if the frame is in focus or not. 
 
 #+begin_src emacs-lisp
-  (set-frame-parameter (selected-frame) 'alpha '(92 85))
-  (add-to-list 'default-frame-alist '(alpha 92 85))
+  (setq my/window-active-alpha 92
+        my/window-not-active-alpha 85)
+
+  (set-frame-parameter (selected-frame) 'alpha `(,my/window-active-alpha ,my/window-not-active-alpha))
+  (add-to-list 'default-frame-alist `(alpha ,my/window-active-alpha ,my/window-not-active-alpha))
 #+end_src
 
 *** Parentheses
@@ -102,30 +104,28 @@ Starts Emacs window maximized.
   (add-hook 'window-setup-hook 'toggle-frame-maximized t)
 #+end_src
 
+** Keybindings
 
-*** Keybindings
-
-Changes =Escape= to do the same as =C-g=.
+Changes =<escape>= to act like =C-g=.
 
 #+begin_src emacs-lisp
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 #+end_src
 
-** General Configurations
+** Editor
+*** Indentation
 
-*** Tabs
-
-Disable =indent-tabs-mode= globally.
+Set default indetation to spaces by disabling =indent-tabs-mode= globally.
 
 #+begin_src emacs-lisp
   (setq-default indent-tabs-mode nil)
 #+end_src
 
-** Packages
+* Packages
+** Package Management
+*** package.el
 
-*** Package loader
-
-We load the package loader package and initialize its contents.
+Initialize package.el, set package-archives sources and refresh the contents.
 
 #+begin_src emacs-lisp
   (require 'package)
@@ -142,14 +142,14 @@ We load the package loader package and initialize its contents.
 
 *** use-package
 
-Here we install use-package, if not already installed.
+Install use-package, if not already installed.
 
 #+begin_src emacs-lisp
   (unless (package-installed-p 'use-package)
     (package-install 'use-package))
 #+end_src
 
-Enabling use-package.
+Enables use-package and ensures every package is present.
 
 #+begin_src emacs-lisp
   (require 'use-package)
@@ -157,7 +157,7 @@ Enabling use-package.
   (setq use-package-always-ensure t)
 #+end_src
 
-*** Org Mode
+** Org
 
 Updates and configures Org mode.
 
@@ -193,19 +193,18 @@ Automatically exports this file into init.el when saved.
   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'my/init-file-org-save-hook)))
 #+end_src
 
-*** Apperance packages
+** Apperance
+*** diminish.el
 
-**** :diminish
-
-This adds =:diminish= command to =use-package=, allowing us to hide minor modes.
+Enables =:diminish= command to =use-package=, to hide minor modes.
 
 #+begin_src emacs-lisp
   (use-package diminish)
 #+end_src
 
-**** doom-modeline
+*** doom-modeline
 
-Installs and configure =doom-modeline=
+Enables and configure =doom-modeline= with =all-the-icons=.
 
 #+begin_src emacs-lisp
   (use-package doom-modeline
@@ -216,7 +215,7 @@ Installs and configure =doom-modeline=
       (all-the-icons-install-fonts t)))
 #+end_src
 
-**** rainbow-delimiters
+*** rainbow-delimiters
 
 =rainbow-delimiters= adds colors to matching parenthesis in programming modes.
 
@@ -226,11 +225,10 @@ Installs and configure =doom-modeline=
     :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
 
-*** Documentation
+** Documentation
+*** helpful
 
-**** helpful
-
-Replaces the default describe functions keybindings with a more complete documentation. We also use the integrate with =counsel= for command auto-completion and descriptions.
+Replaces the default describe functions keybindings with a more concise documentation. We also use integrate with =counsel= for command auto-completion and descriptions.
 
 #+begin_src emacs-lisp
   (use-package helpful
@@ -242,9 +240,8 @@ Replaces the default describe functions keybindings with a more complete documen
            ([remap describe-key] . #'helpful-key)))
 #+end_src
 
-*** Auto-completion
-
-**** ivy
+** Auto-completion
+*** ivy
 
 We use =ivy= for a light-weight auto-completion for commands.
 
@@ -255,7 +252,7 @@ We use =ivy= for a light-weight auto-completion for commands.
     (ivy-mode))
 #+end_src
 
-**** counsel
+*** counsel
 
 Counsel adds extra functionality to =ivy-mode= and its auto-completion features.
 
@@ -266,7 +263,7 @@ Counsel adds extra functionality to =ivy-mode= and its auto-completion features.
     (counsel-mode))
 #+end_src
 
-**** ivy-rich
+*** ivy-rich
 
 Shows richer information when using =ivy-mode= and =cousel-mode=.
 
@@ -278,7 +275,7 @@ Shows richer information when using =ivy-mode= and =cousel-mode=.
     (ivy-rich-mode 1))
 #+end_src
 
-**** which-key
+*** which-key
 
 This package shows what commands can follow after you start a chord and waits.
 
@@ -289,12 +286,10 @@ This package shows what commands can follow after you start a chord and waits.
     (which-key-mode))
 #+end_src
 
-*** Project Management
+** Project Management
+*** projectile
 
-**** projectile
-
-Improves project management capabilities of Emacs, adding features such as: searching all files in a project.
-We bind =C-c p= to access =projectile='s keymap.
+Improves project management capabilities of Emacs. We bind =C-c p= to access =projectile='s keymap.
 
 #+begin_src emacs-lisp
   (use-package projectile
@@ -305,7 +300,7 @@ We bind =C-c p= to access =projectile='s keymap.
     (projectile-mode))
 #+end_src
 
-**** counsel-projectile
+*** counsel-projectile
 
 We want =counsel= and =ivy= features when running =projectitle= commands.
 
@@ -317,7 +312,7 @@ We want =counsel= and =ivy= features when running =projectitle= commands.
     (counsel-projectile-mode))
 #+end_src
 
-**** magit
+*** magit
 
 =magit= integrates Git commands inside the Emacs editor.
 
@@ -325,9 +320,8 @@ We want =counsel= and =ivy= features when running =projectitle= commands.
   (use-package magit)
 #+end_src
 
-*** Programming
-
-**** exec-path-from-shell
+** Programming Utilities
+*** exec-path-from-shell
 
 Makes sure our shell variables are the same inside Emacs.
 
@@ -338,7 +332,7 @@ Makes sure our shell variables are the same inside Emacs.
       (exec-path-from-shell-initialize)))
 #+end_src
 
-**** vterm
+*** vterm
 
 Native terminal emulation
 
@@ -347,9 +341,10 @@ Native terminal emulation
     :commands vterm)
 #+end_src
 
-**** lsp-mode
+** Language Server Mode
+*** lsp-mode
 
-Language Server Protocol mode for IDE-like features when programming.
+Language Server Protocol mode for IDE-like features in programming modes.
 
 #+begin_src emacs-lisp
   (use-package lsp-mode
@@ -361,7 +356,7 @@ Language Server Protocol mode for IDE-like features when programming.
 
 #+end_src
 
-**** lsp-ui-mode
+*** lsp-ui-mode
 
 Shows information from =lsp-mode= in the UI.
 
@@ -370,15 +365,15 @@ Shows information from =lsp-mode= in the UI.
     :commands lsp-ui-mode)
 #+end_src
 
-**** lsp-ivy
+*** lsp-ivy
 
-=ivy-mode= integration with =lsp-mode=
+=ivy-mode= integration with =lsp-mode=.
 
 #+begin_src emacs-lisp
   (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
 #+end_src
 
-**** lsp-treemacs
+*** lsp-treemacs
 
 =treemacs= and =lsp-mode= integration to visualize projects.
 
@@ -387,20 +382,8 @@ Shows information from =lsp-mode= in the UI.
     :after lsp)
 #+end_src
 
-**** lsp-python-ms
-
-Microsoft's Python language server integration.
-
-#+begin_src emacs-lisp
-  (use-package lsp-python-ms
-    :ensure t
-    :init (setq lsp-python-ms-auto-install-server t)
-    :hook (python-mode . (lambda ()
-                           (require 'lsp-python-ms)
-                           (lsp-deferred))))
-#+end_src
-
-**** company
+** Programming Auto-complete
+*** company
 
 Adds auto-completion dialogue box.
 
@@ -416,24 +399,39 @@ Adds auto-completion dialogue box.
            company-idle-delay 0.0))
 #+end_src
 
-**** company-box
+*** company-box
 
-Improves company interface.
+Improves =company-mode= dialog box.
 
 #+begin_src emacs-lisp
   (use-package company-box
     :hook (company-mode . company-box-mode))
 #+end_src
 
-**** flycheck
+** Syntax Checking
+*** flycheck
 
-Adds syntax highlighting capabilities to Emacs.
+Adds syntax checking capabilities to Emacs.
 
 #+begin_src emacs-lisp
   (use-package flycheck
     :hook (prog-mode . flycheck-mode))
 #+end_src
 
+** Programming Languages
+*** Python
+**** lsp-python-ms
+
+Microsoft's Python language server integration.
+
+#+begin_src emacs-lisp
+  (use-package lsp-python-ms
+    :ensure t
+    :init (setq lsp-python-ms-auto-install-server t)
+    :hook (python-mode . (lambda ()
+                           (require 'lsp-python-ms)
+                           (lsp-deferred))))
+#+end_src
 **** pyvenv
 
 Enables python virtual env in Emacs.
@@ -466,7 +464,7 @@ Applies Python black formatter.
 
   (add-hook 'js-mode-hook 'my/js-mode-hook)
 #+end_src
-
+*** Solidity
 **** solidity-mode
 
 The official =solidity-mode= for Emacs. Adds syntax highlight to ~.sol~ files.
@@ -477,7 +475,7 @@ The official =solidity-mode= for Emacs. Adds syntax highlight to ~.sol~ files.
 
 **** company-solidity
 
-=company-mode= auto-completion for solidity
+=company-mode= auto-completion for solidity.
 
 #+begin_src emacs-lisp
   (use-package company-solidity
