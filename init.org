@@ -163,9 +163,9 @@ Updates and configures Org mode.
   (use-package org
     :config
     (setq org-ellipsis " ▼"
-	  org-agenda-start-with-log-mode t
-	  org-log-done 'time
-	  org-log-into-drawer t)
+          org-agenda-start-with-log-mode t
+          org-log-done 'time
+          org-log-into-drawer t)
 
     (require 'org-tempo)
     (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp")))
@@ -175,7 +175,7 @@ Enables =org-indent-mode= when entering =org-mode=.
 
 #+begin_src emacs-lisp
   (defun my/org-mode-hook ()
-      (org-indent-mode 1))
+    (org-indent-mode 1))
 
   (add-hook 'org-mode-hook 'my/org-mode-hook)
 #+end_src
@@ -442,3 +442,11 @@ The official =solidity-mode= for Emacs. Adds syntax highlight to ~.sol~ files.
   (use-package solidity-mode)
 #+end_src
 
+**** company-solidity
+
+=company-mode= auto-completion for solidity
+
+#+begin_src emacs-lisp
+  (use-package company-solidity
+    :commands solidity-mode)
+#+end_src
