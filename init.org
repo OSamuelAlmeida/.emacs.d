@@ -323,7 +323,18 @@ We want =counsel= and =ivy= features when running =projectitle= commands.
   (use-package magit)
 #+end_src
 
-*** Programming Languages
+*** Programming
+
+**** exec-path-from-shell
+
+Makes sure our shell variables are the same inside Emacs.
+
+#+begin_src emacs-lisp
+  (use-package exec-path-from-shell
+    :config
+    (when (memq window-system '(mac ns x))
+      (exec-path-from-shell-initialize)))
+#+end_src
 
 **** lsp-mode
 
