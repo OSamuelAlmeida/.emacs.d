@@ -315,6 +315,70 @@ We want =counsel= and =ivy= features when running =projectitle= commands.
 
 *** Programming Languages
 
+**** lsp-mode
+
+Language Server Protocol mode for IDE-like features when programming.
+
+#+begin_src emacs-lisp
+  (use-package lsp-mode
+    :init
+    (setq lsp-keymap-prefix "C-c l")
+    :hook ((lsp-mode . lsp-enable-which-key-integration))
+    :commands (lsp lsp-deferred))
+
+#+end_src
+
+**** lsp-ui-mode
+
+Shows information from =lsp-mode= in the UI.
+
+#+begin_src emacs-lisp
+  (use-package lsp-ui
+    :commands lsp-ui-mode)
+#+end_src
+
+**** lsp-ivy
+
+=ivy-mode= integration with =lsp-mode=
+
+#+begin_src emacs-lisp
+  (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+#+end_src
+
+**** lsp-python-ms
+
+Microsoft's Python language server integration.
+
+#+begin_src emacs-lisp
+  (use-package lsp-python-ms
+    :ensure t
+    :init (setq lsp-python-ms-auto-install-server t)
+    :hook (python-mode . (lambda ()
+                           (require 'lsp-python-ms)
+                           (lsp-deferred))))
+#+end_src
+
+**** company-mode
+
+Adds auto-completion dialogue box.
+
+#+begin_src emacs-lisp
+  (use-package company
+    :hook (prog-mode . company-mode)
+    :config
+    (setq company-minimum-prefix-length 1
+          company-idle-delay 0.0))
+#+end_src
+
+**** flycheck
+
+Adds syntax highlighting capabilities to Emacs.
+
+#+begin_src emacs-lisp
+  (use-package flycheck
+    :hook (prog-mode . flycheck-mode))
+#+end_src
+
 **** solidity-mode
 
 The official =solidity-mode= for Emacs. Adds syntax highlight to ~.sol~ files.
