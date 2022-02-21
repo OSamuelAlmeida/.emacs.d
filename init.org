@@ -47,9 +47,9 @@ We change Emacs backup files directory from the file folder to a system temp fol
 
 #+begin_src emacs-lisp
   (setq backup-directory-alist
-        `((".*" . ,temporary-file-directory)))
+	`((".*" . ,temporary-file-directory)))
   (setq auto-save-file-name-transforms
-        `((".*" ,temporary-file-directory t)))
+	`((".*" ,temporary-file-directory t)))
 #+end_src
 
 ** Theme
@@ -119,8 +119,8 @@ We load the package loader package and initialize its contents.
   (require 'package)
 
   (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                           ("org" . "https://orgmode.org/elpa/")
-                           ("elpa" . "https://elpa.gnu.org/packages/")))
+			   ("org" . "https://orgmode.org/elpa/")
+			   ("elpa" . "https://elpa.gnu.org/packages/")))
 
   (package-initialize)
 
@@ -153,24 +153,32 @@ Updates and configures Org mode.
   (use-package org
     :config
     (setq org-ellipsis " ▼"
-          org-agenda-start-with-log-mode t
-          org-log-done 'time
-          org-log-into-drawer t)
-    (org-indent-mode)
+	  org-agenda-start-with-log-mode t
+	  org-log-done 'time
+	  org-log-into-drawer t)
 
     (require 'org-tempo)
     (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp")))
 #+end_src
 
+Enables =org-indent-mode= when entering =org-mode=.
+
+#+begin_src emacs-lisp
+  (defun my/org-mode-hook ()
+      (org-indent-mode 1))
+
+  (add-hook 'org-mode-hook 'my/org-mode-hook)
+#+end_src
+
 Automatically exports this file into init.el when saved.
 
 #+begin_src emacs-lisp
-  (defun my/init-org-save-hook ()
+  (defun my/init-file-org-save-hook ()
     (when (string-equal buffer-file-truename "~/.emacs.d/init.org")
       (let ((org-confirm-babel-evaluate nil))
 	(org-babel-tangle))))
 
-  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'my/init-org-save-hook)))
+  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'my/init-file-org-save-hook)))
 #+end_src
 
 *** Apperance packages
@@ -204,7 +212,7 @@ Installs and configure =doom-modeline=
   (use-package rainbow-delimiters
     :diminish
     :hook (prog-mode . rainbow-delimiters-mode))
-#+end_src
+    #+end_src
 
 *** Documentation
 
@@ -218,8 +226,8 @@ Replaces the default describe functions keybindings with a more complete documen
     (counsel-describe-function-function #'helpful-callable)
     (counsel-describe-variable-function #'helpful-variable)
     :bind (([remap describe-function] . counsel-describe-funtion)
-	   ([remap describe-variable] . counsel-describe-variable)
-	   ([remap describe-key] . #'helpful-key)))
+           ([remap describe-variable] . counsel-describe-variable)
+           ([remap describe-key] . #'helpful-key)))
 #+end_src
 
 *** Auto-completion
@@ -280,7 +288,7 @@ We bind =C-c p= to access =projectile='s keymap.
   (use-package projectile
     :diminish
     :bind (:map projectile-mode-map
-		("C-c p" . projectile-command-map))
+                ("C-c p" . projectile-command-map))
     :config
     (projectile-mode))
 #+end_src
