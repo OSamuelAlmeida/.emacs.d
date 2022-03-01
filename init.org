@@ -47,7 +47,7 @@ Disables global line numbers in some modes where it doesn't make sense.
                   vterm-mode-hook
                   treemacs-mode-hook))
     (add-hook mode (lambda () (display-line-numbers-mode 0))))
-#+end_src
+  #+end_src
 
 A mode for highlighting the current cursor line in Emacs.
 
@@ -159,6 +159,7 @@ Enables use-package and ensures every package is present.
 
 ** Org
 
+
 Updates and configures Org mode.
 
 #+begin_src emacs-lisp
@@ -177,7 +178,8 @@ Enables =org-indent-mode= when entering =org-mode=.
 
 #+begin_src emacs-lisp
   (defun my/org-mode-hook ()
-    (org-indent-mode 1))
+    (org-indent-mode 1)
+    (visual-line-mode))
 
   (add-hook 'org-mode-hook 'my/org-mode-hook)
 #+end_src
@@ -223,7 +225,7 @@ Enables and configure =doom-modeline= with =all-the-icons=.
   (use-package rainbow-delimiters
     :diminish
     :hook (prog-mode . rainbow-delimiters-mode))
-#+end_src
+    #+end_src
 
 ** Documentation
 *** helpful
@@ -338,7 +340,8 @@ Native terminal emulation
 
 #+begin_src emacs-lisp
   (use-package vterm
-    :commands vterm)
+    :bind (("C-c t t" . vterm)
+           ("C-c t o" . vterm-other-window)))
 #+end_src
 
 ** Language Server Mode
