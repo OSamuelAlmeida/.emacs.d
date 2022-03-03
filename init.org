@@ -195,7 +195,7 @@ Automatically exports this file into init.el when saved.
   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'my/init-file-org-save-hook)))
 #+end_src
 
-** Apperance
+** Appearance
 *** diminish.el
 
 Enables =:diminish= command to =use-package=, to hide minor modes.
@@ -225,7 +225,7 @@ Enables and configure =doom-modeline= with =all-the-icons=.
   (use-package rainbow-delimiters
     :diminish
     :hook (prog-mode . rainbow-delimiters-mode))
-    #+end_src
+#+end_src
 
 ** Documentation
 *** helpful
@@ -322,6 +322,23 @@ We want =counsel= and =ivy= features when running =projectitle= commands.
   (use-package magit)
 #+end_src
 
+*** treemacs
+
+Directory and tree-structures visualzation.
+
+#+begin_src emacs-lisp
+  (use-package treemacs)
+#+end_src
+
+*** treemacs-projectile
+
+=treemacs= integration with =projectile=.
+
+#+begin_src emacs-lisp
+  (use-package treemacs-projectile
+    :after (treemacs projectile))
+#+end_src
+
 ** Programming Utilities
 *** exec-path-from-shell
 
@@ -382,7 +399,7 @@ Shows information from =lsp-mode= in the UI.
 
 #+begin_src emacs-lisp
   (use-package lsp-treemacs
-    :after lsp)
+    :after (lsp treemacs))
 #+end_src
 
 ** Programming Auto-complete
@@ -395,11 +412,11 @@ Adds auto-completion dialogue box.
     :hook (prog-mode . company-mode)
     :bind (:map company-active-map
                 ("<tab>" . company-complete-selection))
-          (:map lsp-mode-map
-                ("<tab>". company-indent-or-complete-common))
-     :config
-     (setq company-minimum-prefix-length 1
-           company-idle-delay 0.0))
+    (:map lsp-mode-map
+          ("<tab>". company-indent-or-complete-common))
+    :config
+    (setq company-minimum-prefix-length 1
+          company-idle-delay 0.0))
 #+end_src
 
 *** company-box
