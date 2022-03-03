@@ -491,6 +491,8 @@ Applies Python black formatter.
     :hook (python-mode . blacken-mode))
 #+end_src
 
+
+*** Javascript
 **** js-mode
 
 =js-mode= hook.
@@ -502,6 +504,16 @@ Applies Python black formatter.
 
   (add-hook 'js-mode-hook 'my/js-mode-hook)
 #+end_src
+
+**** rjsx-mode
+
+React mode for React files.
+
+#+begin_src emacs-lisp
+  (use-package rjsx-mode
+    :mode "\\.js\\'")
+#+end_src
+
 *** Solidity
 **** solidity-mode
 
