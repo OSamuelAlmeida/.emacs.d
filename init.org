@@ -47,7 +47,7 @@ Disables global line numbers in some modes where it doesn't make sense.
                   vterm-mode-hook
                   treemacs-mode-hook))
     (add-hook mode (lambda () (display-line-numbers-mode 0))))
-  #+end_src
+#+end_src
 
 A mode for highlighting the current cursor line in Emacs.
 
@@ -426,6 +426,24 @@ Improves =company-mode= dialog box.
 #+begin_src emacs-lisp
   (use-package company-box
     :hook (company-mode . company-box-mode))
+#+end_src
+
+*** yasnippet
+
+Adds snippets capabilities to Emacs.
+
+#+begin_src emacs-lisp
+  (use-package yasnippet
+    :hook (prog-mode . yas-minor-mode))
+#+end_src
+
+*** yasnippet-snippets
+
+Collection of snippets for =yasnippet=.
+
+#+begin_src emacs-lisp
+  (use-package yasnippet-snippets
+    :after (yasnippet))
 #+end_src
 
 ** Syntax Checking
