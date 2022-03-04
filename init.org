@@ -380,7 +380,9 @@ Language Server Protocol mode for IDE-like features in programming modes.
     (setq lsp-keymap-prefix "C-c l")
     :hook ((lsp-mode . lsp-enable-which-key-integration)
            (js-mode . lsp-deferred))
-    :commands (lsp lsp-deferred))
+    :commands (lsp lsp-deferred)
+    :custom
+    (lsp-completion-provider :none))
 
 #+end_src
 
@@ -427,6 +429,16 @@ Adds auto-completion dialogue box.
           company-idle-delay 0.0))
 #+end_src
 
+Enable yasnippet backend for =company-mode=.
+
+#+begin_src emacs-lisp
+  (defun my/company-mode-hook ()
+    (setq-local company-backends '((company-capf :with company-yasnippet))))
+
+  (add-hook 'company-mode-hook 'my/company-mode-hook)
+#+end_src
+
+
 *** company-box
 
 Improves =company-mode= dialog box.
@@ -444,6 +456,7 @@ Adds snippets capabilities to Emacs.
   (use-package yasnippet
     :hook (prog-mode . yas-minor-mode))
 #+end_src
+
 
 *** yasnippet-snippets
 
