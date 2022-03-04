@@ -535,6 +535,15 @@ React mode for React files.
     :mode "\\.js\\'")
 #+end_src
 
+React mode hook to disable =js2=mode= semi-colon warnings.
+
+#+begin_src emacs-lisp
+  (defun my/rjsx-mode-hook ()
+    (setq js2-strict-missing-semi-warning nil))
+
+  (add-hook 'rjsx-mode-hook 'my/rjsx-mode-hook)
+#+end_src
+
 *** Solidity
 **** solidity-mode
 
