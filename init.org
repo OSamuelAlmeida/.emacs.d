@@ -104,6 +104,14 @@ Starts Emacs window maximized.
   (add-hook 'window-setup-hook 'toggle-frame-maximized t)
 #+end_src
 
+*** Dialog boxes
+
+Disables GUI dialog boxes.
+
+#+begin_src emacs-lisp
+  (setq use-dialog-box nil)
+#+end_src
+
 ** Keybindings
 
 Changes =<escape>= to act like =C-g=.
