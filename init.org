@@ -12,6 +12,13 @@ This removes the Welcome startup screen.
 #+begin_src emacs-lisp
   (setq inhibit-startup-message t)
 #+end_src
+
+Change garbage collector threshold and timing.
+
+#+begin_src emacs-lisp
+  (setq gc-cons-threshold (* 50 1000 1000))
+  (add-hook 'after-init-hook (lambda () (setq gc-cons-threshold 800000)))
+#+end_src
 ** Backups
 
 Set Emacs backup files directory to a system temporary folder.
