@@ -292,6 +292,25 @@ Shows richer information when using =ivy-mode= and =cousel-mode=.
     (ivy-rich-mode 1))
 #+end_src
 
+*** prescient
+
+Better sorting for Emacs.
+
+#+begin_src emacs-lisp
+  (use-package prescient)
+#+end_src
+
+*** ivy-prescient
+
+=prescient= integration with =ivy=.
+
+#+begin_src emacs-lisp
+  (use-package ivy-prescient
+    :after (ivy prescient)
+    :config
+    (ivy-prescient-mode))
+    #+end_src
+
 *** which-key
 
 This package shows what commands can follow after you start a chord and waits.
@@ -453,6 +472,16 @@ Improves =company-mode= dialog box.
 #+begin_src emacs-lisp
   (use-package company-box
     :hook (company-mode . company-box-mode))
+#+end_src
+
+*** company-prescient
+
+Better sorting for =company-mode=.
+
+#+begin_src emacs-lisp
+  (use-package company-prescient
+    :after (company prescient)
+    :hook (company-mode . company-prescient-mode))
 #+end_src
 
 *** yasnippet
