@@ -405,7 +405,9 @@ Language Server Protocol mode for IDE-like features in programming modes.
     :init
     (setq lsp-keymap-prefix "C-c l")
     :hook ((lsp-mode . lsp-enable-which-key-integration)
-           (js-mode . lsp-deferred))
+           (js-mode . lsp-deferred)
+           (c++-mode . lsp-deferred)
+           (c-mode . lsp-deferred))
     :commands (lsp lsp-deferred)
     :custom
     (lsp-completion-provider :none))
@@ -607,3 +609,15 @@ Rust programming language support.
     (use-package rust-mode
       :hook (rust-mode . lsp-deferred))
 #+end_src
+
+*** C++
+**** hook
+
+#+begin_src emacs-lisp
+  (defun my/c++-mode-hook ()
+    (setq c-basic-offset 4)
+    (s-set-offset 'substatement-open 0))
+
+  (add-hook 'c++-mode-hook 'my/c++-mode-hook)
+#+end_src
+
