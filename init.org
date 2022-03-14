@@ -606,8 +606,10 @@ The official =solidity-mode= for Emacs. Adds syntax highlight to ~.sol~ files.
 Rust programming language support.
 
 #+begin_src emacs-lisp
-    (use-package rust-mode
-      :hook (rust-mode . lsp-deferred))
+  (use-package rust-mode
+    :hook (rust-mode . lsp-deferred)
+    :config
+    (setq rust-format-on-save t))
 #+end_src
 
 *** C++
