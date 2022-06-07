@@ -365,6 +365,15 @@ We want =counsel= and =ivy= features when running =projectitle= commands.
   (use-package magit)
 #+end_src
 
+*** forge
+
+Integrates =magit= with git forges.
+
+#+begin_src emacs-lisp
+  (use-package forge
+    :after magit)
+#+end_src
+
 *** treemacs
 
 Directory and tree-structures visualzation.
