@@ -136,6 +136,14 @@ Set default indetation to spaces by disabling =indent-tabs-mode= globally.
   (setq-default indent-tabs-mode nil)
 #+end_src
 
+** GPG
+
+Uses loopback mode for gpg.
+
+#+begin_src emacs-lisp
+  (setq epa-pinentry-mode 'loopback)
+#+end_src
+
 * Load Files
 ** Sensitive configuration
 
@@ -484,7 +492,6 @@ Enable yasnippet backend for =company-mode=.
   (add-hook 'company-mode-hook 'my/company-mode-hook)
 #+end_src
 
-
 *** company-box
 
 Improves =company-mode= dialog box.
@@ -512,7 +519,6 @@ Adds snippets capabilities to Emacs.
   (use-package yasnippet
     :hook (prog-mode . yas-minor-mode))
 #+end_src
-
 
 *** yasnippet-snippets
 
@@ -646,6 +652,13 @@ Rust programming language support.
     (s-set-offset 'substatement-open 0))
 
   (add-hook 'c++-mode-hook 'my/c++-mode-hook)
+#+end_src
+
+*** YAML
+
+#+begin_src emacs-lisp
+  (use-package yaml-mode
+    :mode "\\.\\(yml\\yaml\\)\\'")
 #+end_src
 
 ** DevOps
