@@ -136,6 +136,14 @@ Set default indetation to spaces by disabling =indent-tabs-mode= globally.
   (setq-default indent-tabs-mode nil)
 #+end_src
 
+* Load Files
+** Sensitive configuration
+
+Load variables that are not commited to repository.
+
+#+begin_src emacs-lisp
+  (load "~/.emacs.d/vars.el")
+#+end_src
 * Packages
 ** Package Management
 *** package.el
@@ -543,14 +551,19 @@ Enables python virtual env in Emacs.
 
 **** blacken
 
+#+begin_src emacs-lisp
+  (defun my/blacken-mode-python-hook ()
+    (unless (member (expand-file-name (buffer-file-name)) blacken-mode-disabled)
+      (blacken-mode t)))
+#+end_src
+
 Applies Python black formatter.
 
 #+begin_src emacs-lisp
   (use-package blacken
     :diminish
-    :hook (python-mode . blacken-mode))
+    :hook (python-mode . my/blacken-mode-python-hook))
 #+end_src
-
 
 *** Javascript
 **** js-mode
