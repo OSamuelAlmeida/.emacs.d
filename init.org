@@ -330,10 +330,11 @@ Improves project management capabilities of Emacs. We bind =C-c p= to access =pr
 #+begin_src emacs-lisp
   (use-package projectile
     :diminish
+    :init
+    (projectile-mode +1)
     :bind (:map projectile-mode-map
-                ("C-c p" . projectile-command-map))
-    :config
-    (projectile-mode))
+                ("C-c p" . projectile-command-map)))
+
 #+end_src
 
 *** counsel-projectile
@@ -622,4 +623,24 @@ Rust programming language support.
 
   (add-hook 'c++-mode-hook 'my/c++-mode-hook)
 #+end_src
+
+** DevOps
+
+*** Docker
+
+#+begin_src emacs-lisp
+(use-package docker
+  :ensure t
+  :bind ("C-c d" . docker))
+#+end_src
+
+*** Kubernetes
+
+#+begin_src emacs-lisp
+  (use-package kubernetes
+    :ensure t
+    :commands (kubernetes-overview))
+#+end_src
+
+
 
