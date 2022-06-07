@@ -553,8 +553,10 @@ Enables python virtual env in Emacs.
 
 #+begin_src emacs-lisp
   (defun my/blacken-mode-python-hook ()
-    (unless (member (expand-file-name (buffer-file-name)) blacken-mode-disabled)
-      (blacken-mode t)))
+    (unless (member t (mapcar
+                       (lambda (item) (string-prefix-p item (expand-file-name (buffer-file-name))))
+                       blacken-mode-disabled))
+                    (blacken-mode)))
 #+end_src
 
 Applies Python black formatter.
