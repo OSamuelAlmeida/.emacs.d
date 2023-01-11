@@ -19,6 +19,10 @@ Change garbage collector threshold and timing.
   (setq gc-cons-threshold (* 50 1000 1000))
   (add-hook 'after-init-hook (lambda () (setq gc-cons-threshold 800000)))
 #+end_src
+
+#+begin_src emacs-lisp
+  (add-hook 'emacs-startup-hook 'treemacs)
+#+end_src
 ** Backups
 
 Set Emacs backup files directory to a system temporary folder.
@@ -28,6 +32,14 @@ Set Emacs backup files directory to a system temporary folder.
         `((".*" . ,temporary-file-directory)))
   (setq auto-save-file-name-transforms
         `((".*" ,temporary-file-directory t)))
+#+end_src
+
+** Alarm
+
+Enables visual ring bell
+
+#+begin_src emacs-lisp
+   (setq visible-bell 1)
 #+end_src
 
 ** Appearence
@@ -416,9 +428,20 @@ Makes sure our shell variables are the same inside Emacs.
 Native terminal emulation
 
 #+begin_src emacs-lisp
-  (use-package vterm
-    :bind (("C-c t t" . vterm)
-           ("C-c t o" . vterm-other-window)))
+  (use-package vterm)
+#+end_src
+*** multi-vter
+
+Multiple window support for vterm
+
+#+begin_src emacs-lisp
+  (use-package multi-vterm
+    :ensure t
+    :bind (("C-c t t" . multi-vterm)
+           ("C-c t d" . multi-vterm-dedicated-toggle)
+           ("C-c t n" . multi-vterm-next)
+           ("C-c t p" . multi-vterm-prev)))
+
 #+end_src
 
 ** Language Server Mode
@@ -433,7 +456,9 @@ Language Server Protocol mode for IDE-like features in programming modes.
     :hook ((lsp-mode . lsp-enable-which-key-integration)
            (js-mode . lsp-deferred)
            (c++-mode . lsp-deferred)
-           (c-mode . lsp-deferred))
+           (c-mode . lsp-deferred)
+           (rjsx-mode . lsp-deferred)
+           (typescript-mode . lsp-deferred))
     :commands (lsp lsp-deferred)
     :custom
     (lsp-completion-provider :none))
@@ -464,6 +489,16 @@ Shows information from =lsp-mode= in the UI.
 #+begin_src emacs-lisp
   (use-package lsp-treemacs
     :after (lsp treemacs))
+#+end_src
+
+*** lsp-pyright
+
+#+begin_src emacs-lisp
+  (use-package lsp-pyright
+    :ensure t
+    :hook (python-mode . (lambda ()
+                            (require 'lsp-pyright)
+                            (lsp-deferred))))
 #+end_src
 
 ** Programming Auto-complete
@@ -541,18 +576,6 @@ Adds syntax checking capabilities to Emacs.
 
 ** Programming Languages
 *** Python
-**** lsp-python-ms
-
-Microsoft's Python language server integration.
-
-#+begin_src emacs-lisp
-  (use-package lsp-python-ms
-    :ensure t
-    :init (setq lsp-python-ms-auto-install-server t)
-    :hook (python-mode . (lambda ()
-                           (require 'lsp-python-ms)
-                           (lsp-deferred))))
-#+end_src
 **** pyvenv
 
 Enables python virtual env in Emacs.
@@ -611,6 +634,13 @@ React mode hook to disable =js2=mode= semi-colon warnings.
     (setq js2-strict-missing-semi-warning nil))
 
   (add-hook 'rjsx-mode-hook 'my/rjsx-mode-hook)
+#+end_src
+
+**** typescript
+
+#+begin_src emacs-lisp
+  (use-package typescript-mode
+    :mode "\\.ts\\'")
 #+end_src
 
 *** Solidity
